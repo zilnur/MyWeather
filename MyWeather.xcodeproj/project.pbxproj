@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		BC3161EC27F09BE100647B54 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC3161EB27F09BE100647B54 /* ConfigViewController.swift */; };
+		BC33343E27FCB6400094510A /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC33343D27FCB6400094510A /* NetworkService.swift */; };
+		BC33344127FDDBB90094510A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BC33343F27FDDBB90094510A /* Model.xcdatamodeld */; };
+		BC46B25528016D9500BD9A5C /* DatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC46B25428016D9500BD9A5C /* DatabaseService.swift */; };
 		BC6800AE27F8843700B91319 /* HourForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6800AD27F8843700B91319 /* HourForecastViewController.swift */; };
 		BC6800B527F886D700B91319 /* DailyForecastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6800B427F886D700B91319 /* DailyForecastViewController.swift */; };
 		BC6800B727F8886D00B91319 /* NowWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC6800B627F8886D00B91319 /* NowWeatherView.swift */; };
@@ -22,6 +25,9 @@
 
 /* Begin PBXFileReference section */
 		BC3161EB27F09BE100647B54 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
+		BC33343D27FCB6400094510A /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
+		BC33344027FDDBB90094510A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		BC46B25428016D9500BD9A5C /* DatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseService.swift; sourceTree = "<group>"; };
 		BC6800AD27F8843700B91319 /* HourForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourForecastViewController.swift; sourceTree = "<group>"; };
 		BC6800B427F886D700B91319 /* DailyForecastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastViewController.swift; sourceTree = "<group>"; };
 		BC6800B627F8886D00B91319 /* NowWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowWeatherView.swift; sourceTree = "<group>"; };
@@ -47,6 +53,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC33341027FB70580094510A /* DataBase */ = {
+			isa = PBXGroup;
+			children = (
+				BC33343F27FDDBB90094510A /* Model.xcdatamodeld */,
+				BC46B25428016D9500BD9A5C /* DatabaseService.swift */,
+			);
+			path = DataBase;
+			sourceTree = "<group>";
+		};
+		BC33343C27FCB6150094510A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BC33343D27FCB6400094510A /* NetworkService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
 		BC6800AF27F8844600B91319 /* StartController */ = {
 			isa = PBXGroup;
 			children = (
@@ -92,7 +115,9 @@
 		BCC948BC27F07385001E3575 = {
 			isa = PBXGroup;
 			children = (
+				BC33341027FB70580094510A /* DataBase */,
 				BCC948C727F07385001E3575 /* MyWeather */,
+				BC33343C27FCB6150094510A /* Services */,
 				BCC948C627F07385001E3575 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -192,14 +217,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BC33343E27FCB6400094510A /* NetworkService.swift in Sources */,
 				BCC948CD27F07385001E3575 /* StartViewController.swift in Sources */,
 				BCC948C927F07385001E3575 /* AppDelegate.swift in Sources */,
 				BC6800B527F886D700B91319 /* DailyForecastViewController.swift in Sources */,
 				BC3161EC27F09BE100647B54 /* ConfigViewController.swift in Sources */,
 				BCC948CB27F07385001E3575 /* SceneDelegate.swift in Sources */,
+				BC46B25528016D9500BD9A5C /* DatabaseService.swift in Sources */,
 				BC6800AE27F8843700B91319 /* HourForecastViewController.swift in Sources */,
 				BC6800B727F8886D00B91319 /* NowWeatherView.swift in Sources */,
 				BC6800BF27F9B95900B91319 /* MainPageViewController.swift in Sources */,
+				BC33344127FDDBB90094510A /* Model.xcdatamodeld in Sources */,
 				BCFCD94527F48B580014BF45 /* MainViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,6 +434,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		BC33343F27FDDBB90094510A /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				BC33344027FDDBB90094510A /* Model.xcdatamodel */,
+			);
+			currentVersion = BC33344027FDDBB90094510A /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = BCC948BD27F07385001E3575 /* Project object */;
 }

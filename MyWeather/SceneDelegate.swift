@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  MyWeather
-//
-//  Created by Ильнур Закиров on 27.03.2022.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
