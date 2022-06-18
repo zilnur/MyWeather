@@ -9,13 +9,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let newScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: newScene)
         window?.makeKeyAndVisible()
-        
-//        let vc = MainViewController()
-//        let vc2 = StartViewController()
         let pvc = MainPageViewController()
-//        let uvc = [vc, vc2]
-//        pvc.setViewControllers(uvc, direction: .forward, animated: false)
-        window?.rootViewController = pvc
+        let novc = UINavigationController(rootViewController: pvc)
+        window?.rootViewController = novc
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

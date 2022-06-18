@@ -1,6 +1,9 @@
 import Foundation
+import Combine
 
 struct CityModel: Decodable {
+    var lat : Double
+    var lon: Double
     var current: CurrentModel
     var daily: [DailyModel]
     var hourly: [HourlyModel]
@@ -12,7 +15,7 @@ struct CurrentModel: Decodable {
     let sunset: Double
     let temp: Double
     let humidity: Double
-    let clouds: Double
+    let clouds: Int
     let windSpeed: Double
     let weather: [Weather]
     let windDeg: Int
@@ -35,8 +38,8 @@ struct DailyModel: Decodable {
     let dt: Int
     let sunrise: Double
     let sunset: Double
-    let temp: [TempModel]
-    let feelsLike: [FeelsLikeModel]
+    let temp: TempModel
+    let feelsLike: FeelsLikeModel
     let humidity: Double
     let windSpeed: Double
     let windDeg: Int
@@ -76,7 +79,11 @@ struct FeelsLikeModel: Decodable {
 }
 
 struct Weather: Decodable {
-    let description: String
+    let discription: String
+    
+    enum CodingKeys: String, CodingKey {
+        case discription = "description"
+    }
 }
 
 struct HourlyModel: Decodable {
@@ -104,9 +111,19 @@ struct HourlyModel: Decodable {
 }
 
 struct Coordinates: Decodable {
-    let name: String
-    let lon: Double
+    let localNames: LocalNames
     let lat: Double
+    let lon: Double
+    
+    enum CodingKeys: String, CodingKey {
+        case localNames = "local_names"
+        case lat
+        case lon
+    }
+}
+
+struct LocalNames: Decodable {
+    let ru: String
 }
 
 class NetworkService {
@@ -115,32 +132,36 @@ class NetworkService {
     
     let api = "c9b20455baf67b0f54988645cdb51382"
     
+    let decoder = JSONDecoder()
+    
     func setCoordinates(cityName: String, complition: @escaping(String, Double, Double) -> Void) {
-        guard let latinName = cityName.applyingTransform(.toLatin, reverse: false) else { return }
-        if let url = URL(string: "http://api.openweathermap.org/geo/1.0/direct?q=\(latinName)&limit=1&appid=\(api)") {
+        if let url = URL(string: "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(api)") {
             let session = URLSession.shared.dataTask(with: url) { data, _, error in
                 if let uData = data {
                     do {
-                    let json = try JSONDecoder().decode([Coordinates].self, from: uData)
-                        let ru = json[0].name
-                        let lon = json[0].lon
+                        let json = try JSONDecoder().decode([Coordinates].self, from: uData)
+                        let name = json[0].localNames.ru
                         let lat = json[0].lat
-                        complition(ru,lon,lat)
+                        let lon = json[0].lon
+                        complition(name,lon,lat)
                     } catch {
                         print(error)
                     }
                 }
             }
             session.resume()
+        } else {
+            print("oops1")
         }
     }
     
     func addCity(cityName: String, complition: @escaping(CityModel, String) -> Void) {
         setCoordinates(cityName: cityName) { [weak self] name, lon, lat in
             guard let self = self else { return }
-            guard let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=55.7887&lon=49.1221&exclude=alerts,minutely&appid=\(self.api)&units=metric&lang=ru") else { return }
+            guard let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=alerts,minutely&appid=\(self.api)&units=metric&lang=ru") else { return }
             let session = URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let uData = data else { return }
+                guard let uData = data else { print("Oops")
+                    return }
                 do {
                     let city = try JSONDecoder().decode(CityModel.self, from: uData)
                     complition(city, name)
@@ -151,4 +172,5 @@ class NetworkService {
             session.resume()
         }
     }
+    
 }
