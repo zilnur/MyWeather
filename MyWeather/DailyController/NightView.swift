@@ -40,10 +40,10 @@ class NightView: UIView {
     }()
     
     lazy var feelLikeStack = makeStackView()
-    private lazy var windStack = makeStackView()
-    private lazy var uviStack = makeStackView()
-    private lazy var rainStack = makeStackView()
-    private lazy var cloudsStack = makeStackView()
+    lazy var windStack = makeStackView()
+    lazy var uviStack = makeStackView()
+    lazy var rainStack = makeStackView()
+    lazy var cloudsStack = makeStackView()
     
     private lazy var mainStack: UIStackView = {
         let view = UIStackView(arrangedSubviews: [

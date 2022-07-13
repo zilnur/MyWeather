@@ -1,5 +1,6 @@
 import Foundation
 import UIKit
+import Combine
 
 protocol MainPagePresenterOutput {
     
@@ -7,15 +8,18 @@ protocol MainPagePresenterOutput {
 
 protocol MainPagePresenterInput {
     func setCurrenPage(currentPage: Int)
+    func update()
 }
 
 class MainPagePresenter: MainPagePresenterOutput {
     
-    var cities: [City] {
-        DatabaseService.shared.setCitiesArray()
-    }
+    var cities: [City]
     
     var view: MainPagePresenterInput?
+    
+    init() {
+        self.cities = DatabaseService.shared.setCitiesArray()
+    }
     
     func setMainPageControllers(_ controller: UIPageViewController) {
         if cities.isEmpty {
@@ -26,6 +30,7 @@ class MainPagePresenter: MainPagePresenterOutput {
             let presenter = MainModulePresenter(city: cities[0])
             let svc = MainViewController()
             svc.presenter = presenter
+            presenter.view = svc
             controller.setViewControllers([svc], direction: .forward, animated: true)
             controller.title = presenter.city.name
         }
@@ -37,6 +42,7 @@ class MainPagePresenter: MainPagePresenterOutput {
             let presenter = MainModulePresenter(city: cities.last!)
             let mvc = MainViewController()
             mvc.presenter = presenter
+            presenter.view = mvc
             return mvc
         }
         let city = vc.presenter?.cityName
@@ -44,6 +50,7 @@ class MainPagePresenter: MainPagePresenterOutput {
         guard vc.presenter?.cityName != cities.first?.name else { return nil }
         let presenter = MainModulePresenter(city: cities[index - 1])
         let viewController = MainViewController()
+        presenter.view = viewController
         viewController.presenter = presenter
         return viewController
     }
@@ -55,6 +62,7 @@ class MainPagePresenter: MainPagePresenterOutput {
                 let presenter = MainModulePresenter(city: self.cities.last!)
                 let mainVC = MainViewController()
                 mainVC.presenter = presenter
+                presenter.view = mainVC
                 pageController.setViewControllers([mainVC], direction: .forward, animated: true)
             }
             return AddCityViewController() }
@@ -66,6 +74,7 @@ class MainPagePresenter: MainPagePresenterOutput {
                 let presenter = MainModulePresenter(city: self.cities.last!)
                 let mainVC = MainViewController()
                 mainVC.presenter = presenter
+                presenter.view = mainVC
                 pageController.setViewControllers([mainVC], direction: .forward, animated: true)
             }
             return addVC
@@ -73,6 +82,7 @@ class MainPagePresenter: MainPagePresenterOutput {
         guard let index = cities.firstIndex(where: {$0.name == city}) else { return nil }
         let presenter = MainModulePresenter(city: cities[index + 1])
         let mvc =  MainViewController()
+        presenter.view = mvc
         mvc.presenter = presenter
         return mvc
     }
@@ -90,5 +100,20 @@ class MainPagePresenter: MainPagePresenterOutput {
             pageViewController.title = "Добавьте город"
             view?.setCurrenPage(currentPage: cities.count + 1)
         }
+    }
+    
+//    func updateForecast() {
+//        for city in cities {
+//            DatabaseService.shared.updateCity(cityName: city.name!.convert())
+//        }
+//        
+//    }
+    
+    func setUpdateVC(number: Int, controller: UIPageViewController) {
+        let vc = MainViewController()
+        let presenter = MainModulePresenter(city: cities[number])
+        vc.presenter = presenter
+        controller.setViewControllers([vc], direction: .forward, animated: false)
+        controller.title = presenter.cityName
     }
 }

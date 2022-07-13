@@ -1,24 +1,7 @@
 import UIKit
 
-struct DailyForecastData {
-    let date: Int32
-    let humidity: Int16
-    let description: String
-    let minTemp: Double
-    let maxTemp: Double
-}
-
 class DailyCollectionViewCell: UICollectionViewCell {
-    
-//    var daily: DailyForecast? {
-//        didSet {
-//            dateLabel.text = daily!.dt.toShotDate()
-//            label.text = "\(String(describing: daily!.humidity))%"
-//            descreiptionLabel.text = daily!.weatherDescription?.withFirstUppercase()
-//            minMaxTempLabel.text = "\(Int(daily!.temp!.min))°/\(Int(daily!.temp!.max))°"
-//        }
-//    }
-    
+
     let dateLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -87,12 +70,5 @@ class DailyCollectionViewCell: UICollectionViewCell {
          minMaxTempLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 17),
          minMaxTempLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -26)
         ].forEach {$0.isActive = true}
-    }
-    
-    func setViewsValues(data: DailyForecastData) {
-        dateLabel.text = data.date.toShotDate()
-        label.text = "\(String(describing: data.humidity))%"
-        descreiptionLabel.text = data.description.withFirstUppercase()
-        minMaxTempLabel.text = "\(Int(data.minTemp))°/\(Int(data.maxTemp))°"
     }
 }

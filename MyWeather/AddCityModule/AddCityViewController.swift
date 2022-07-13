@@ -22,7 +22,7 @@ class AddCityViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+//        view.backgroundColor = .white
         view.addSubview(addButton)
         [addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
          addButton.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
@@ -32,7 +32,7 @@ class AddCityViewController: UIViewController {
     }
     
     @objc func addCity() {
-        let alert = UIAlertController(title: "Добавть город", message: "Введите название города", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Добавить город", message: "Введите название города", preferredStyle: .alert)
         alert.addTextField()
         let alertOk = UIAlertAction(title: "OK", style: .default) {_ in
             guard let text = alert.textFields?[0].text else { return }

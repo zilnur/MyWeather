@@ -23,6 +23,9 @@
         <attribute name="clouds" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="dt" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="humidity" attributeType="Integer 16" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="moonrise" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="moonset" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pop" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="sunrise" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="sunset" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="uvi" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -60,7 +63,7 @@
     <elements>
         <element name="City" positionX="-230.9887695312501" positionY="-189.7752380371094" width="134.8425903320312" height="119"/>
         <element name="CurrentWeather" positionX="-18.92071533203125" positionY="-1.7344970703125" width="128" height="164"/>
-        <element name="DailyForecast" positionX="-205.2525024414062" positionY="0.1962127685546875" width="133.3233642578125" height="194"/>
+        <element name="DailyForecast" positionX="-205.2525024414062" positionY="0.1962127685546875" width="133.3233642578125" height="239"/>
         <element name="FeelsLike" positionX="-198" positionY="-18" width="128" height="89"/>
         <element name="HourForecast" positionX="-394.2328491210938" positionY="-5.019195556640625" width="128" height="164"/>
         <element name="Temp" positionX="-207" positionY="-27" width="128" height="119"/>

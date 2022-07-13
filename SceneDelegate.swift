@@ -4,11 +4,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let newScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: newScene)
         window?.makeKeyAndVisible()
+        let presenter = MainPagePresenter()
         let pvc = MainPageViewController()
         let novc = UINavigationController(rootViewController: pvc)
         window?.rootViewController = novc

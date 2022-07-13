@@ -38,6 +38,8 @@ struct DailyModel: Decodable {
     let dt: Int
     let sunrise: Double
     let sunset: Double
+    let moonrise: Int
+    let moonset: Int
     let temp: TempModel
     let feelsLike: FeelsLikeModel
     let humidity: Double
@@ -46,11 +48,14 @@ struct DailyModel: Decodable {
     let weather: [Weather]
     let clouds: Int
     let uvi: Double
+    let pop: Double
     
     enum CodingKeys: String, CodingKey {
         case dt
         case sunrise
         case sunset
+        case moonrise
+        case moonset
         case temp
         case feelsLike = "feels_like"
         case humidity
@@ -59,6 +64,7 @@ struct DailyModel: Decodable {
         case clouds
         case uvi
         case weather
+        case pop
     }
 }
 

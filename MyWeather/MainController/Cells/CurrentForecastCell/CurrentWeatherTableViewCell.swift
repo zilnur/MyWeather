@@ -1,33 +1,6 @@
 import UIKit
 
-struct CurrentForecastData {
-    var minTemp: Double
-    var maxTemp: Double
-    var currentTemp: Double
-    var description: String
-    var humidity: Int16
-    var windSpeed: Double
-    var clouds: Int16
-    var date: Int32
-    var sunrise: Int32
-    var sunset: Int32 
-}
-
 class CurrentWeatherTableViewCell: UITableViewCell {
-    
-//    var currentWeather: CurrentWeather? {
-//        didSet {
-//            self.dayNightTempLabel.text = "\(Int(currentWeather!.temp))°"
-//            self.currentTemp.text = "\(Int(currentWeather!.temp))°"
-//            self.descriptionLabel.text = currentWeather!.weatherDescription!.description.withFirstUppercase()
-//            view.humidityValueLabel.text = "\(Int(currentWeather!.humidity))"
-//            view.windValueLabel.text = "\(Int(currentWeather!.windSpeed))м/с"
-//            view.cloudsValueLabel.text = "\(String(describing: currentWeather!.clouds))"
-//            dateLabel.text = currentWeather!.dt.toDate()
-//            sunriseValueLabel.text = Int32(currentWeather!.sunrise).toTime()
-//            sunsetValueLabel.text = Int32(currentWeather!.sunset).toTime()
-//        }
-//    }
     
     let ellipseImage: UIImageView = {
         let view = UIImageView(image: UIImage(named: "Ellipse 3"))
@@ -126,18 +99,6 @@ class CurrentWeatherTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    func setUpViewsValues(data: CurrentForecastData) {
-        dayNightTempLabel.text = "\(Int(data.minTemp))°/\(Int(data.maxTemp))°"
-        currentTemp.text = "\(Int(data.currentTemp))°"
-        descriptionLabel.text = data.description.withFirstUppercase()
-        view.humidityValueLabel.text = "\(Int(data.humidity))"
-        view.windValueLabel.text = "\(Int(data.windSpeed))м/с"
-        view.cloudsValueLabel.text = "\(String(describing: data.clouds))"
-        dateLabel.text = data.date.toDate()
-        sunriseValueLabel.text = Int32(data.sunrise).toTime()
-        sunsetValueLabel.text = Int32(data.sunset).toTime()
     }
     
     func setupViews() {

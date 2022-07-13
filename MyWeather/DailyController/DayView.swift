@@ -27,7 +27,6 @@ class DayView: UIView {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont(name: "Rubik-Regular", size: 30)
-        view.text = "23"
         return view
     }()
     
@@ -35,7 +34,6 @@ class DayView: UIView {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont(name: "Rubik-Medium", size: 18)
-        view.text = "Тест"
         return view
     }()
     
@@ -71,7 +69,7 @@ class DayView: UIView {
     
     func makeStackView() -> (image: UIImageView, desLabel: UILabel, valueLabel: UILabel, stack: UIStackView) {
         let image: UIImageView = {
-            let view = UIImageView(image: UIImage(named: "cloud"))
+            let view = UIImageView()
             view.translatesAutoresizingMaskIntoConstraints = false
             view.contentMode = .scaleAspectFit
             return view
@@ -80,7 +78,6 @@ class DayView: UIView {
             let view = UILabel()
             view.translatesAutoresizingMaskIntoConstraints = false
             view.font = UIFont(name: "Rubik-Regular", size: 14)
-            view.text = "Тест"
             return view
         }()
         let valueLabel: UILabel = {

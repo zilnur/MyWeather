@@ -154,6 +154,12 @@ extension Int32 {
         dateFormatter.timeStyle = .short
         return dateFormatter.string(from: date)
     }
+    
+    func toTimeInterval() -> String {
+        let hours = self / 3600
+        let minutes = (self % 3600) / 60
+        return "\(hours)ч \(minutes)мин"
+    }
 }
 
 extension UILabel {

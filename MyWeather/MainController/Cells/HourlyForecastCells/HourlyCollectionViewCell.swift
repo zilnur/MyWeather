@@ -1,24 +1,6 @@
-//
-//  HourlyCollectionViewCell.swift
-//  MyWeather
-//
-//  Created by Ильнур Закиров on 29.04.2022.
-//
 import UIKit
 
-struct HourlyForecastData {
-    var date: Int32
-    var temp: Double
-}
-
 class HourlyCollectionViewCell: UICollectionViewCell {
-    
-    var hourForecast: HourForecast? {
-        didSet {
-            timeLabel.text = hourForecast!.dt.toTime()
-            tempLabel.text = "\(Int(hourForecast!.temp))°"
-        }
-    }
     
     let timeLabel: UILabel = {
         let view = UILabel()
@@ -52,21 +34,18 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
+//        self.isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setViewsValues(data: HourlyForecastData) {
-        timeLabel.text = data.date.toTime()
-        tempLabel.text = "\(Int(data.temp))°"
-    }
-    
     func setupViews() {
         contentView.layer.cornerRadius = 22
         contentView.layer.borderWidth = 0.5
         contentView.layer.borderColor = UIColor(red: 0.671, green: 0.737, blue: 0.918, alpha: 1).cgColor
+        self.isUserInteractionEnabled = false
         
         [timeLabel, descriptionImageView, tempLabel].forEach(contentView.addSubview(_:))
         

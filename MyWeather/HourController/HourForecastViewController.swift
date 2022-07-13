@@ -9,14 +9,11 @@ import UIKit
 
 class HourForecastViewController: UIViewController {
     
-    let hourlyForecast: [HourForecast]
-    
-//    let city: String
+    let presenter: HourlyPresenterOutput
     
     private let tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .grouped)
         view.register(HourlyTempChangeTableViewCell.self, forCellReuseIdentifier: "cell")
-        view.register(HourTableViewCell.self, forCellReuseIdentifier: "cell1")
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .white
         view.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
@@ -24,9 +21,8 @@ class HourForecastViewController: UIViewController {
         return view
     }()
     
-    init(hourlyForecast: [HourForecast]) {
-        self.hourlyForecast = hourlyForecast
-//        self.city = city
+    init(presenter: HourlyPresenterOutput) {
+        self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,6 +34,7 @@ class HourForecastViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         tableView.reloadData()
+        presenter.qwe()
     }
 }
 
@@ -62,41 +59,41 @@ extension HourForecastViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        switch section {
-//        case 0:
-//            return 1
-//        case 1:
-//            return 24
-//        default:
-//            return 0
-//        }
-        24
+        presenter.setNumberOfItems()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? HourlyTempChangeTableViewCell
-        cell?.forecast = hourlyForecast[indexPath.item]
-//        let cell1 = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as? HourTableViewCell
-//        cell1?.forecast = self.hourlyForecast
-//        cell1?.cityNameLabel.text = self.city
-//        switch indexPath.section {
-//        case 0:
-//            return cell1 ?? UITableViewCell()
-//        default:
-//            return cell ?? UITableViewCell()
-//        }
-        return cell ?? UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! HourlyTempChangeTableViewCell
+        presenter.buildDataForTable(cell: cell, indexPath: indexPath)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = View()
-        view.forecast = self.hourlyForecast
+        let view = HourTableHeaderView()
+        view.collectionView.dataSource = self
+        view.collectionView.delegate = self
+        presenter.setCityNameForHeader(label: view.cityNameLabel)
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         223
     }
-    
 }
 
+extension HourForecastViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        presenter.setNumberOfItems()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HourCollectionViewCell
+        presenter.buildDataForCollection(cell: cell, indexPath: indexPath)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: 60, height: 112)
+    }
+}

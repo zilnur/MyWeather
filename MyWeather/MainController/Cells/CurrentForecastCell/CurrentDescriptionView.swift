@@ -1,10 +1,3 @@
-//
-//  CurrentDescriptionView.swift
-//  MyWeather
-//
-//  Created by Ильнур Закиров on 29.04.2022.
-//
-
 import UIKit
 
 class CurrentDescriptionView: UIView {

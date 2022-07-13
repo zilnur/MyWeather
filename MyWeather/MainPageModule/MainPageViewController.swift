@@ -9,19 +9,18 @@ class MainPageViewController: UIPageViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.currentPageIndicatorTintColor = .black
         view.tintColor = .systemIndigo
-        view.numberOfPages = presenter.setNumberOfPages()
+        view.isUserInteractionEnabled = false
         view.pageIndicatorTintColor = .lightGray
         return view
     }()
-
-    var ewq = 0
     
     init() {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
-        dataSource = self
+        presenter.setMainPageControllers(self)
         delegate = self
+        dataSource = self
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -34,21 +33,27 @@ class MainPageViewController: UIPageViewController {
         appearance.backgroundColor = .white
         self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
         presenter.view = self
+//        presenter.updateForecast()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.addSubview(pageControl)
+        let rightButton = UIBarButtonItem(image: .init(systemName: "person"), style: .plain, target: self, action: #selector(city))
+        navigationItem.rightBarButtonItem = rightButton
+        setupViews()
+    }
+    
+    func setupViews() {
+        view.backgroundColor = .white
+        self.view.insertSubview(pageControl, at: 0)
+        pageControl.numberOfPages = presenter.setNumberOfPages()
         [pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
          pageControl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ].forEach {$0.isActive = true}
-        presenter.setMainPageControllers(self)
-        let rightButton = UIBarButtonItem(image: .init(systemName: "person"), style: .plain, target: self, action: #selector(city))
-        navigationItem.rightBarButtonItem = rightButton
     }
-
+    
     @objc func city() {
-        DatabaseService.shared.setCities()
+        presenter.setMainPageControllers(self)
     }
 }
 
@@ -70,5 +75,10 @@ extension MainPageViewController: UIPageViewControllerDataSource, UIPageViewCont
 extension MainPageViewController: MainPagePresenterInput {
     func setCurrenPage(currentPage: Int) {
         pageControl.currentPage = currentPage
+    }
+    
+    func update() {
+        self.delegate = self
+        self.dataSource = self
     }
 }

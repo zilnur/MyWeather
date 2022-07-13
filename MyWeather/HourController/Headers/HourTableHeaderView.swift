@@ -7,17 +7,12 @@
 
 import UIKit
 
-class View: UIView {
-    
-    var forecast: [HourForecast]?
-    
-    var cityName: String?
+class HourTableHeaderView: UIView {
     
     let cityNameLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont(name: "Rubik-Medium", size: 18)
-        view.text = "Казань"
         return view
     }()
     
@@ -41,8 +36,6 @@ class View: UIView {
     }
     
     func setupViews() {
-        collectionView.dataSource = self
-        collectionView.delegate = self
         self.translatesAutoresizingMaskIntoConstraints = false
         
         [cityNameLabel, collectionView].forEach(self.addSubview(_:))
@@ -58,22 +51,5 @@ class View: UIView {
          collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
          collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
         ].forEach { $0.isActive = true }
-    }
-}
-
-extension View: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        forecast!.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? HourCollectionViewCell
-        cell?.forecast = self.forecast![indexPath.item]
-        return cell ?? UICollectionViewCell()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 60, height: 112)
     }
 }

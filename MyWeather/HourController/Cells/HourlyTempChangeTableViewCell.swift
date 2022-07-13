@@ -8,19 +8,6 @@
 import UIKit
 
 class HourlyTempChangeTableViewCell: UITableViewCell {
-    
-    var forecast: HourForecast? {
-        didSet {
-            dateLabel.text = forecast!.dt.toShotDate()
-            timeLabel.text = forecast!.dt.toTime()
-            tempLabel.text = "\(Int(forecast!.temp))°"
-            descriptionLabel.text = forecast!.weatherDescription!.withFirstUppercase()
-            feelLikeLabel.text = "По ощущению \(Int(forecast!.feelsLike))°"
-            windValueLabel.text = "\(Int(forecast!.windSpeed))м/с"
-            precipitationValueLabel.text = "0%"
-            humidityValueLabel.text = "\(forecast!.humidity)"
-        }
-    }
 
     let dateLabel: UILabel = {
         let view = UILabel()

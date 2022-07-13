@@ -9,14 +9,6 @@ import UIKit
 
 class HourCollectionViewCell: UICollectionViewCell {
     
-    var forecast: HourForecast? {
-        didSet {
-            tempLabel.text = "\(Int(forecast!.temp))°"
-            precipitationValueLabel.text = "0"
-            timeLabel.text = forecast!.dt.toTime()
-        }
-    }
-    
     let tempLabel: UILabel = {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
