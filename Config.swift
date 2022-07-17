@@ -130,9 +130,12 @@ extension Int32 {
         let date = Date(timeIntervalSince1970: TimeInterval(self))
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "RU_ru")
-        dateFormatter.dateStyle = .full
-        dateFormatter.timeStyle = .short
-        dateFormatter.dateFormat = "HH:mm eee d MMMM"
+        switch UserDefaults.standard.bool(forKey: "is24") {
+        case true:
+            dateFormatter.dateFormat = "HH:mm eee d MMMM"
+        case false:
+            dateFormatter.dateFormat = "hh:mm eee d MMMM"
+        }
         return dateFormatter.string(from: date)
     }
     
@@ -140,8 +143,6 @@ extension Int32 {
         let date = Date(timeIntervalSince1970: TimeInterval(self))
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "RU_ru")
-        dateFormatter.timeStyle = .none
-        dateFormatter.dateStyle = .short
         dateFormatter.dateFormat = "dd/MM"
         return dateFormatter.string(from: date)
     }
@@ -149,9 +150,13 @@ extension Int32 {
     func toTime() -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(self))
         let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "RU_ru")
-        dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .short
+        dateFormatter.locale = Locale(identifier: "ru_ru")
+        switch UserDefaults.standard.bool(forKey: "is24") {
+        case true:
+            dateFormatter.dateFormat = "HH:mm"
+        case false:
+            dateFormatter.dateFormat = "hh:mm"
+        }
         return dateFormatter.string(from: date)
     }
     
@@ -159,6 +164,18 @@ extension Int32 {
         let hours = self / 3600
         let minutes = (self % 3600) / 60
         return "\(hours)ч \(minutes)мин"
+    }
+}
+
+extension Double {
+    func toString() -> String {
+        switch UserDefaults.standard.bool(forKey: "isCelsius") {
+        case true:
+            return "\(Int(self))"
+        case false:
+            let farenheit = (self * 5/9) + 32
+            return "\(Int(farenheit))"
+        }
     }
 }
 

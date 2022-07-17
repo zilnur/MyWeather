@@ -11,7 +11,7 @@ class DailyCollectionViewCell: UICollectionViewCell {
     }()
     
     let imageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "sun"))
+        let view = UIImageView(image: UIImage(named: "09d"))
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

@@ -1,19 +1,20 @@
 import Foundation
+import UIKit
 
 protocol MainModulePresenterInput {
-    func qwe()
+    func reloadData()
 }
 
 protocol MainModulePresenterOutput {
     var cityName: String { get }
     func buildCurrentForecastData(cell: CurrentWeatherTableViewCell, indexPath: IndexPath)
-    func buildDailyForecastsData() -> Int
+    func setNumbersOfDailyCells() -> Int
     func buildDailyForecastsData(cell: DailyCollectionViewCell, indexPath: IndexPath)
-    func buildHourlyForecastsData() -> Int
+    func setNumbersOfHourlyCells() -> Int
     func buildHourlyForecastsData(cell: HourlyCollectionViewCell, indexPath: IndexPath)
-    func toHourController() -> HourForecastViewController
+    func toHourController()
     func getDailies() -> [DailyForecast]
-    func toDailyController(indexPath: IndexPath) -> DailyForecastViewController
+    func toDailyController(indexPath: IndexPath)
     func setSelectedItemInCollectionView() -> IndexPath
     func updateForecast()
 }
@@ -26,16 +27,19 @@ class MainModulePresenter: MainModulePresenterOutput {
     
     var view: MainModulePresenterInput?
     
-    init(city: City) {
+    let coordinator: Coordinator
+    
+    init(city: City, coordinator: Coordinator) {
         self.city = city
+        self.coordinator = coordinator
         self.cityName = city.name ?? ""
     }
     
     func buildCurrentForecastData(cell: CurrentWeatherTableViewCell, indexPath: IndexPath) {
         let descriptor = NSSortDescriptor(key: "dt", ascending: true)
         let daily = city.daily?.sortedArray(using: [descriptor]) as! [DailyForecast]
-        cell.dayNightTempLabel.text = "\(Int(daily[indexPath.item].temp!.min))°/\(Int(daily[indexPath.item].temp!.max))°"
-        cell.currentTemp.text = "\(Int(city.currentWeather!.temp))°"
+        cell.dayNightTempLabel.text = "\(daily[indexPath.item].temp!.min.toString())°/\(daily[indexPath.item].temp!.max.toString())°"
+        cell.currentTemp.text = "\(city.currentWeather!.temp.toString())°"
         cell.descriptionLabel.text = city.currentWeather!.weatherDescription!.withFirstUppercase()
         cell.view.humidityValueLabel.text = "\(Int(city.currentWeather!.humidity))%"
         cell.view.windValueLabel.text = "\(Int(city.currentWeather!.windSpeed))м/с"
@@ -45,7 +49,7 @@ class MainModulePresenter: MainModulePresenterOutput {
         cell.sunsetValueLabel.text = city.currentWeather!.sunset.toTime()
     }
     
-    func buildDailyForecastsData() -> Int{
+    func setNumbersOfDailyCells() -> Int{
         let descriptor = NSSortDescriptor(key: "dt", ascending: true)
         let daily = city.daily?.sortedArray(using: [descriptor]) as! [DailyForecast]
         return daily.count
@@ -57,10 +61,10 @@ class MainModulePresenter: MainModulePresenterOutput {
         cell.dateLabel.text = daily[indexPath.item].dt.toShotDate()
         cell.label.text = "\(String(describing: daily[indexPath.item].humidity))%"
         cell.descreiptionLabel.text = daily[indexPath.item].weatherDescription?.withFirstUppercase()
-        cell.minMaxTempLabel.text = "\(Int(daily[indexPath.item].temp!.min))°/\(Int(daily[indexPath.item].temp!.max))°"
+        cell.minMaxTempLabel.text = "\(daily[indexPath.item].temp!.min.toString())°/\(daily[indexPath.item].temp!.max.toString())°"
     }
     
-    func buildHourlyForecastsData() -> Int {
+    func setNumbersOfHourlyCells() -> Int {
         let descriptor = NSSortDescriptor(key: "dt", ascending: true)
         let hourly = city.hour?.sortedArray(using: [descriptor]) as! [HourForecast]
         return hourly.count
@@ -73,11 +77,12 @@ class MainModulePresenter: MainModulePresenterOutput {
         for i in 0..<24 {
             hourlyFiltered.append(hourly[i])
         }
+        cell.descriptionImageView.image = UIImage(named: hourlyFiltered[indexPath.item].weatherIcon!)
         cell.timeLabel.text = hourlyFiltered[indexPath.item].dt.toTime()
-        cell.tempLabel.text = "\(Int(hourlyFiltered[indexPath.item].temp))°"
+        cell.tempLabel.text = "\(hourlyFiltered[indexPath.item].temp.toString())°"
     }
     
-    func toHourController() -> HourForecastViewController {
+    func toHourController() {
         let descriptor = NSSortDescriptor(key: "dt", ascending: true)
         let hourly = city.hour?.sortedArray(using: [descriptor]) as! [HourForecast]
         var horlyFiltered = [HourForecast]()
@@ -87,9 +92,7 @@ class MainModulePresenter: MainModulePresenterOutput {
         let qwe = horlyFiltered[0].dt % 10800
         horlyFiltered = horlyFiltered.filter({$0.dt % 10800 == qwe})
         let hourForecastsModel = HourlyForecastModel(name: city.name!, forecasts: horlyFiltered)
-        let hourlyPresenter = HourlyForecastPresenter(model: hourForecastsModel)
-        let hourVC = HourForecastViewController(presenter: hourlyPresenter)
-        return hourVC
+        coordinator.showHourlyModule(model: hourForecastsModel)
     }
     
     func getDailies() -> [DailyForecast] {
@@ -98,13 +101,11 @@ class MainModulePresenter: MainModulePresenterOutput {
         return hourly
     }
     
-    func toDailyController(indexPath: IndexPath) -> DailyForecastViewController {
+    func toDailyController(indexPath: IndexPath) {
         let descriptor = NSSortDescriptor(key: "dt", ascending: true)
         let daily = city.daily?.sortedArray(using: [descriptor]) as! [DailyForecast]
         let dailyForecastModel = DailyForecastModel(cityName: city.name!, forecasts: daily)
-        let dailyPresenter = DailyPresenter(model: dailyForecastModel, selectedIndexPath: indexPath)
-        let dailyForecastView = DailyForecastViewController(presenter: dailyPresenter)
-        return dailyForecastView
+        coordinator.showDailyView(model: dailyForecastModel, indexPath: indexPath)
     }
     
     func setSelectedItemInCollectionView() -> IndexPath {
@@ -135,7 +136,7 @@ class MainModulePresenter: MainModulePresenterOutput {
         DatabaseService.shared.updateCity(cityName: cityName.convert()) { [weak self] city in
             guard let self = self else { return }
             self.city = city
-            self.view?.qwe()
+            self.view?.reloadData()
         }
     }
 }

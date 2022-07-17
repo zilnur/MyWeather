@@ -17,9 +17,13 @@ class MainViewController: UIViewController, MainModulePresenterInput {
     var hourlyTableViewCell: HourlyWeatherTableViewCell?
     var dailyForecastTableViewCell: DailyForecastTableViewCell?
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
+    init(presenter: MainModulePresenterOutput) {
+        self.presenter = presenter
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -28,7 +32,7 @@ class MainViewController: UIViewController, MainModulePresenterInput {
         presenter?.updateForecast()
     }
     
-    func qwe() {
+    func reloadData() {
         DispatchQueue.main.async {
             self.tableView.dataSource = self
             self.tableView.delegate = self
@@ -39,7 +43,6 @@ class MainViewController: UIViewController, MainModulePresenterInput {
 
 extension MainViewController {
     func setupViews() {
-//        view.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
         [tableView].forEach(view.addSubview(_:))
@@ -92,7 +95,8 @@ extension MainViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:
-            self.navigationController?.pushViewController(presenter!.toHourController(), animated: true)
+//            self.navigationController?.pushViewController(presenter!.toHourController(), animated: true)
+            presenter?.toHourController()
         default:
             break
         }
@@ -107,7 +111,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             return 24
         }
         if collectionView == self.dailyForecastTableViewCell?.dailyForecastCollectionView {
-            return presenter?.buildDailyForecastsData() ?? 0
+            return presenter?.setNumbersOfDailyCells() ?? 0
         }
         return 0
     }
@@ -146,7 +150,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         switch collectionView {
         case dailyForecastTableViewCell?.dailyForecastCollectionView:
-            self.navigationController?.pushViewController((presenter?.toDailyController(indexPath: indexPath))!, animated: true)
+            presenter?.toDailyController(indexPath: indexPath)
         default:
             break
         }

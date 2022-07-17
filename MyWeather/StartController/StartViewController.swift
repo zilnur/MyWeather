@@ -1,13 +1,8 @@
-//
-//  ViewController.swift
-//  MyWeather
-//
-//  Created by Ильнур Закиров on 27.03.2022.
-//
-
 import UIKit
 
 class StartViewController: UIViewController {
+    
+    let coordinator: Coordinator
     
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -45,7 +40,7 @@ class StartViewController: UIViewController {
         return label
     }()
     
-    private let yesButton: UIButton = {
+    private lazy var yesButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         switch button.isFocused {
@@ -57,27 +52,57 @@ class StartViewController: UIViewController {
         button.setTitle("ИСПОЛЬЗОВАТЬ МЕСТОПОЛОЖЕНИЕ  УСТРОЙСТВА", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         button.setTitleColor(UIColor.white, for: .normal)
+        button.addTarget(self, action: #selector(tapYesBtn), for: .touchUpInside)
 //        button.titleLabel?.adjustsFontSizeToFitWidth = true
         button.layer.cornerRadius = 10
         return button
     }()
     
-    private let noButton: UIButton = {
+    private lazy var noButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont(name: "Rubik-Regular", size: 16)
         button.setTitle("НЕТ, Я БУДУ ДОБАВЛЯТЬ ЛОКАЦИИ", for: .normal)
         button.contentHorizontalAlignment = .right
+        button.addTarget(self, action: #selector(tapNoBtn), for: .touchUpInside)
         button.setTitleColor(UIColor.white, for: .normal)
         return button
     }()
-
+    
+    init(coordinator: Coordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(red: 0.125, green: 0.306, blue: 0.78, alpha: 1)
         setupViews()
     }
-
+    
+    @objc func tapYesBtn() {
+        UserDefaults.standard.set(true, forKey: "isn'tFirstStart")
+        LocationService.shared.getApproval {
+            guard let lat = LocationService.shared.getLocations()?.coordinate.latitude,
+                let lon = LocationService.shared.getLocations()?.coordinate.longitude else { return }
+            NetworkService.shared.getCityNameFormCoordinates(lat: lat, lon: lon) {cityName in
+                DatabaseService.shared.addCity(cityName: cityName.convert()) {
+                    DispatchQueue.main.async {
+                        self.coordinator.showMainPageView()
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func tapNoBtn() {
+        UserDefaults.standard.set(true, forKey: "isn'tFirstStart")
+        coordinator.showMainPageView()
+    }
 
 }
 

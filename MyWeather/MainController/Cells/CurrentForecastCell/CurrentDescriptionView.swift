@@ -3,8 +3,9 @@ import UIKit
 class CurrentDescriptionView: UIView {
     
     let cloudsImageView: UIImageView = {
-        let view =  UIImageView(image: UIImage(named: "Clouds"))
+        let view =  UIImageView(image: UIImage(named: "02d"))
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -19,6 +20,7 @@ class CurrentDescriptionView: UIView {
     let windImageView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "wind"))
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -33,6 +35,7 @@ class CurrentDescriptionView: UIView {
     let humidityImageView: UIImageView = {
         let view = UIImageView(image: UIImage(named: "humidity"))
         view.translatesAutoresizingMaskIntoConstraints = false
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -69,7 +72,7 @@ class CurrentDescriptionView: UIView {
          windImageView.topAnchor.constraint(equalTo: self.topAnchor),
          windImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
          
-         windValueLabel.leadingAnchor.constraint(equalTo: windImageView.trailingAnchor, constant:  5),
+         windValueLabel.leadingAnchor.constraint(equalTo: windImageView.trailingAnchor, constant:  7),
          windValueLabel.topAnchor.constraint(equalTo: self.topAnchor),
          windValueLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor),
          

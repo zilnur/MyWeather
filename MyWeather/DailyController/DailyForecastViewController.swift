@@ -40,9 +40,24 @@ class DailyForecastViewController: UIViewController {
     
     private let sunMoonView = SunMoonView()
     
+    lazy var backButton: UIButton = {
+        let view = UIButton()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle(" ⃪  Дневная погода", for: .normal)
+        view.setTitleColor(.black, for: .normal)
+        view.addTarget(self, action: #selector(tapLeftBtn), for: .touchUpInside)
+        return view
+    }()
+    
+    lazy var leftButton: UIBarButtonItem = {
+       let view = UIBarButtonItem(customView: backButton)
+        return view
+    }()
+    
     init(presenter: DailyForecastPresenterOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        self.navigationItem.leftBarButtonItem = leftButton
     }
     
     required init?(coder: NSCoder) {
@@ -59,6 +74,10 @@ class DailyForecastViewController: UIViewController {
                 indexPaths[0]
             }
         }
+    }
+    
+    @objc func tapLeftBtn() {
+        presenter.goBack()
     }
 }
 

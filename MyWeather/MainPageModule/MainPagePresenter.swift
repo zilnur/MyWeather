@@ -3,7 +3,13 @@ import UIKit
 import Combine
 
 protocol MainPagePresenterOutput {
-    
+    func setMainPageControllers(_ controller: UIPageViewController)
+    func beforeViewController(viewControllerBefore viewController: UIViewController) -> UIViewController?
+    func afterViewController(pageController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController?
+    func setNumberOfPages() -> Int
+    func pageControllerFinishAnimating(pageViewController: UIPageViewController)
+    func afterAddNewCity(controller: UIPageViewController)
+    func openSettings(completion: @escaping ()-> ())
 }
 
 protocol MainPagePresenterInput {
@@ -17,18 +23,19 @@ class MainPagePresenter: MainPagePresenterOutput {
     
     var view: MainPagePresenterInput?
     
-    init() {
+    let coordinator: Coordinator
+    
+    init(coordinator: Coordinator) {
+        self.coordinator = coordinator
         self.cities = DatabaseService.shared.setCitiesArray()
     }
     
     func setMainPageControllers(_ controller: UIPageViewController) {
         if cities.isEmpty {
-            let addVC = AddCityViewController()
-            controller.setViewControllers([addVC], direction: .forward, animated: true)
-            controller.title = "Добавьте город"
+            coordinator.showAddCityView(controller: controller)
         } else {
-            let presenter = MainModulePresenter(city: cities[0])
-            let svc = MainViewController()
+            let presenter = MainModulePresenter(city: cities[0],coordinator: coordinator)
+            let svc = MainViewController(presenter: presenter)
             svc.presenter = presenter
             presenter.view = svc
             controller.setViewControllers([svc], direction: .forward, animated: true)
@@ -39,56 +46,30 @@ class MainPagePresenter: MainPagePresenterOutput {
     func beforeViewController(viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard cities.isEmpty == false else {return nil}
         guard let vc = viewController as? MainViewController else {
-            let presenter = MainModulePresenter(city: cities.last!)
-            let mvc = MainViewController()
-            mvc.presenter = presenter
-            presenter.view = mvc
-            return mvc
+            let view = coordinator.factory.makeMainModule(city: cities.last!, coordinator: coordinator)
+            return view
         }
         let city = vc.presenter?.cityName
         guard let index = cities.firstIndex(where: {$0.name == city}) else { return nil }
-        guard vc.presenter?.cityName != cities.first?.name else { return nil }
-        let presenter = MainModulePresenter(city: cities[index - 1])
-        let viewController = MainViewController()
-        presenter.view = viewController
-        viewController.presenter = presenter
-        return viewController
+        guard city != cities.first?.name else { return nil }
+        let view = coordinator.factory.makeMainModule(city: cities[index - 1], coordinator: coordinator)
+        return view
     }
     
     func afterViewController(pageController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
-        guard cities.isEmpty == false else {
-            let addVC = AddCityViewController()
-            addVC.onAdd = {
-                let presenter = MainModulePresenter(city: self.cities.last!)
-                let mainVC = MainViewController()
-                mainVC.presenter = presenter
-                presenter.view = mainVC
-                pageController.setViewControllers([mainVC], direction: .forward, animated: true)
-            }
-            return AddCityViewController() }
+        guard cities.isEmpty == false else { return nil }
         guard let VC = viewController as? MainViewController else { return nil }
         let city = VC.presenter?.cityName
         if city == cities.last?.name {
-            let addVC = AddCityViewController()
-            addVC.onAdd = {
-                let presenter = MainModulePresenter(city: self.cities.last!)
-                let mainVC = MainViewController()
-                mainVC.presenter = presenter
-                presenter.view = mainVC
-                pageController.setViewControllers([mainVC], direction: .forward, animated: true)
-            }
-            return addVC
+            return nil
         }
         guard let index = cities.firstIndex(where: {$0.name == city}) else { return nil }
-        let presenter = MainModulePresenter(city: cities[index + 1])
-        let mvc =  MainViewController()
-        presenter.view = mvc
-        mvc.presenter = presenter
-        return mvc
+        let view = coordinator.factory.makeMainModule(city: cities[index + 1], coordinator: coordinator)
+        return view
     }
     
     func setNumberOfPages() -> Int {
-        cities.count + 1
+        cities.count
     }
     
     func pageControllerFinishAnimating(pageViewController: UIPageViewController) {
@@ -96,24 +77,23 @@ class MainPagePresenter: MainPagePresenterOutput {
         pageViewController.title = vc.presenter?.cityName
             guard let index = cities.firstIndex(where: {$0.name == vc.presenter?.cityName}) else { return }
             view?.setCurrenPage(currentPage: index)
-        } else {
-            pageViewController.title = "Добавьте город"
-            view?.setCurrenPage(currentPage: cities.count + 1)
         }
     }
     
-//    func updateForecast() {
-//        for city in cities {
-//            DatabaseService.shared.updateCity(cityName: city.name!.convert())
-//        }
-//        
-//    }
+    func afterAddNewCity(controller: UIPageViewController) {
+        cities = DatabaseService.shared.setCitiesArray()
+        let presenter = MainModulePresenter(city: cities.last!, coordinator: coordinator)
+        let svc = MainViewController(presenter: presenter)
+        svc.presenter = presenter
+        presenter.view = svc
+        view?.update()
+        view?.setCurrenPage(currentPage: cities.count)
+        print(cities.count)
+        controller.setViewControllers([svc], direction: .forward, animated: true)
+        controller.title = presenter.city.name
+    }
     
-    func setUpdateVC(number: Int, controller: UIPageViewController) {
-        let vc = MainViewController()
-        let presenter = MainModulePresenter(city: cities[number])
-        vc.presenter = presenter
-        controller.setViewControllers([vc], direction: .forward, animated: false)
-        controller.title = presenter.cityName
+    func openSettings(completion: @escaping ()-> ()) {
+        coordinator.showSettingsView(completion: completion)
     }
 }

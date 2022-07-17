@@ -1,136 +1,4 @@
 import Foundation
-import Combine
-
-struct CityModel: Decodable {
-    var lat : Double
-    var lon: Double
-    var current: CurrentModel
-    var daily: [DailyModel]
-    var hourly: [HourlyModel]
-}
-
-struct CurrentModel: Decodable {
-    let dt: Int
-    let sunrise: Double
-    let sunset: Double
-    let temp: Double
-    let humidity: Double
-    let clouds: Int
-    let windSpeed: Double
-    let weather: [Weather]
-    let windDeg: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case dt
-        case sunrise
-        case sunset
-        case temp
-        case humidity
-        case clouds
-        case windSpeed = "wind_speed"
-        case weather
-        case windDeg = "wind_deg"
-    }
-    
-}
-
-struct DailyModel: Decodable {
-    let dt: Int
-    let sunrise: Double
-    let sunset: Double
-    let moonrise: Int
-    let moonset: Int
-    let temp: TempModel
-    let feelsLike: FeelsLikeModel
-    let humidity: Double
-    let windSpeed: Double
-    let windDeg: Int
-    let weather: [Weather]
-    let clouds: Int
-    let uvi: Double
-    let pop: Double
-    
-    enum CodingKeys: String, CodingKey {
-        case dt
-        case sunrise
-        case sunset
-        case moonrise
-        case moonset
-        case temp
-        case feelsLike = "feels_like"
-        case humidity
-        case windSpeed = "wind_speed"
-        case windDeg = "wind_deg"
-        case clouds
-        case uvi
-        case weather
-        case pop
-    }
-}
-
-struct TempModel: Decodable {
-    let min: Double
-    let max: Double
-    let day: Double
-    let morn: Double
-    let eve: Double
-    let night: Double
-}
-
-struct FeelsLikeModel: Decodable {
-    let day: Double
-    let morn: Double
-    let eve: Double
-    let night: Double
-}
-
-struct Weather: Decodable {
-    let discription: String
-    
-    enum CodingKeys: String, CodingKey {
-        case discription = "description"
-    }
-}
-
-struct HourlyModel: Decodable {
-    let dt: Int
-    let temp: Double
-    let feelsLike: Double
-    let humidity: Double
-    let uvi: Double
-    let clouds: Int
-    let windSpeed: Double
-    let windDeg: Int
-    let weather: [Weather]
-    
-    enum CodingKeys: String, CodingKey {
-        case dt
-        case temp
-        case feelsLike = "feels_like"
-        case humidity
-        case uvi
-        case clouds
-        case windSpeed = "wind_speed"
-        case windDeg = "wind_deg"
-        case weather
-    }
-}
-
-struct Coordinates: Decodable {
-    let localNames: LocalNames
-    let lat: Double
-    let lon: Double
-    
-    enum CodingKeys: String, CodingKey {
-        case localNames = "local_names"
-        case lat
-        case lon
-    }
-}
-
-struct LocalNames: Decodable {
-    let ru: String
-}
 
 class NetworkService {
     
@@ -140,7 +8,7 @@ class NetworkService {
     
     let decoder = JSONDecoder()
     
-    func setCoordinates(cityName: String, complition: @escaping(String, Double, Double) -> Void) {
+    func getCoordinates(cityName: String, complition: @escaping(String, Double, Double) -> Void) {
         if let url = URL(string: "http://api.openweathermap.org/geo/1.0/direct?q=\(cityName)&limit=1&appid=\(api)") {
             let session = URLSession.shared.dataTask(with: url) { data, _, error in
                 if let uData = data {
@@ -157,12 +25,12 @@ class NetworkService {
             }
             session.resume()
         } else {
-            print("oops1")
+            print("qweewq")
         }
     }
     
     func addCity(cityName: String, complition: @escaping(CityModel, String) -> Void) {
-        setCoordinates(cityName: cityName) { [weak self] name, lon, lat in
+        getCoordinates(cityName: cityName) { [weak self] name, lon, lat in
             guard let self = self else { return }
             guard let url = URL(string: "https://api.openweathermap.org/data/2.5/onecall?lat=\(lat)&lon=\(lon)&exclude=alerts,minutely&appid=\(self.api)&units=metric&lang=ru") else { return }
             let session = URLSession.shared.dataTask(with: url) { data, response, error in
@@ -177,6 +45,23 @@ class NetworkService {
             }
             session.resume()
         }
+    }
+    
+    func getCityNameFormCoordinates(lat: Double, lon: Double, completion: @escaping(String) -> ()) {
+        guard let url = URL(string: "http://api.openweathermap.org/geo/1.0/reverse?lat=\(lat)&lon=\(lon)&limit=1&appid=\(api)") else {
+            print("qqqwww")
+            return }
+        let session = URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let uData = data else { return }
+            do {
+                let coordinates = try JSONDecoder().decode([Coordinates].self, from: uData)
+                let name = coordinates[0].localNames.ru
+                completion(name)
+            } catch {
+                print(error)
+            }
+        }
+        session.resume()
     }
     
 }

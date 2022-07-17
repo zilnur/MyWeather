@@ -65,7 +65,7 @@ class HourlyTempChangeTableViewCell: UITableViewCell {
         let view = UILabel()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.font = UIFont(name: "Rubik-Regular", size: 14)
-        view.textWithImage(imageName: "cloud", text: "Облачность")
+        view.textWithImage(imageName: "03d", text: "Облачность")
         return view
     }()
     

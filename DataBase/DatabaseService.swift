@@ -20,7 +20,7 @@ class DatabaseService {
         self.container = container
     }
     
-    func addCity(cityName: String) {
+    func addCity(cityName: String, completion: @escaping () -> ()) {
         NetworkService.shared.addCity(cityName: cityName) { [weak self] city, name in
             guard let self = self else { return }
             self.backgrounContext.perform {
@@ -41,7 +41,7 @@ class DatabaseService {
                 newCity.currentWeather = current
                 let dailies = NSMutableSet()
                 for i in city.daily {
-
+                    
                     let feelLike = NSEntityDescription.insertNewObject(forEntityName: "FeelsLike", into: self.backgrounContext) as! FeelsLike
                     feelLike.night = i.feelsLike.night
                     feelLike.morn = i.feelsLike.morn
@@ -60,6 +60,7 @@ class DatabaseService {
                     daily.windSpeed = i.windSpeed
                     daily.windDeg = Int16(i.windDeg)
                     daily.weatherDescription = i.weather[0].discription
+                    daily.weatherIcon = i.weather[0].icon
                     daily.clouds = Int16(i.clouds)
                     daily.dt = Int32(i.dt)
                     daily.humidity = Int16(i.humidity)
@@ -78,6 +79,7 @@ class DatabaseService {
                 for i in city.hourly {
                     let hourly = NSEntityDescription.insertNewObject(forEntityName: "HourForecast", into: self.backgrounContext) as! HourForecast
                     hourly.weatherDescription = i.weather[0].discription
+                    hourly.weatherIcon = i.weather[0].icon
                     hourly.feelsLike = i.feelsLike
                     hourly.uvi = i.uvi
                     hourly.temp = i.temp
@@ -91,6 +93,7 @@ class DatabaseService {
                 newCity.hour = hourlies
                 do {
                     try self.backgrounContext.save()
+                    completion()
                 } catch let error {
                     print(error)
                 }
@@ -105,7 +108,6 @@ class DatabaseService {
             request.predicate = NSPredicate(format: "%K == %@", "name", NewCityName)
             do {
                 let city = try self.backgrounContext.fetch(request)
-                print("qqq \(city[0].currentWeather?.dt.toTime())")
                 city[0].name = NewCityName
                 city[0].currentWeather?.dt = Int32(newCityData.current.dt)
                 city[0].currentWeather?.sunset = Int32(newCityData.current.sunset)
@@ -125,23 +127,18 @@ class DatabaseService {
                     let forecast = NSEntityDescription.insertNewObject(forEntityName: "DailyForecast", into: self.backgrounContext) as! DailyForecast
                     let temp = NSEntityDescription.insertNewObject(forEntityName: "Temp", into: self.backgrounContext) as! Temp
                     let feelLike = NSEntityDescription.insertNewObject(forEntityName: "FeelsLike", into: self.backgrounContext) as! FeelsLike
-                forecast.windSpeed = daily.windSpeed
-                forecast.windDeg = Int16(daily.windDeg)
-                forecast.weatherDescription = daily.weather[0].discription
-                forecast.clouds = Int16(daily.clouds)
-                forecast.dt = Int32(daily.dt)
-                forecast.humidity = Int16(daily.humidity)
-                forecast.sunrise = Int32(daily.sunrise)
-                forecast.sunset = Int32(daily.sunset)
-                forecast.moonrise = Int32(daily.moonrise)
-                forecast.moonset = Int32(daily.moonset)
-                forecast.pop = daily.pop
-//                    forecast.temp?.morn = daily.temp.morn
-//                    forecast.temp?.eve = daily.temp.eve
-//                    forecast.temp?.night = daily.temp.night
-//                    forecast.temp?.day = daily.temp.day
-//                    forecast.temp?.max = daily.temp.max
-//                    forecast.temp?.min = daily.temp.min
+                    forecast.windSpeed = daily.windSpeed
+                    forecast.windDeg = Int16(daily.windDeg)
+                    forecast.weatherDescription = daily.weather[0].discription
+                    forecast.weatherIcon = daily.weather[0].icon
+                    forecast.clouds = Int16(daily.clouds)
+                    forecast.dt = Int32(daily.dt)
+                    forecast.humidity = Int16(daily.humidity)
+                    forecast.sunrise = Int32(daily.sunrise)
+                    forecast.sunset = Int32(daily.sunset)
+                    forecast.moonrise = Int32(daily.moonrise)
+                    forecast.moonset = Int32(daily.moonset)
+                    forecast.pop = daily.pop
                     temp.night = daily.temp.night
                     temp.morn = daily.temp.morn
                     temp.min = daily.temp.min
@@ -154,7 +151,7 @@ class DatabaseService {
                     feelLike.day = daily.feelsLike.day
                     forecast.temp = temp
                     forecast.feelsLike = feelLike
-                forecast.uvi = daily.uvi
+                    forecast.uvi = daily.uvi
                     forecast.feelsLike?.day = daily.feelsLike.day
                     forecast.feelsLike?.night = daily.feelsLike.night
                     forecast.feelsLike?.eve = daily.feelsLike.eve
@@ -169,6 +166,7 @@ class DatabaseService {
                 for hourly in newCityData.hourly {
                     let forecast = NSEntityDescription.insertNewObject(forEntityName: "HourForecast", into: self.backgrounContext) as! HourForecast
                     forecast.weatherDescription = hourly.weather[0].discription
+                    forecast.weatherIcon = hourly.weather[0].icon
                     forecast.feelsLike = hourly.feelsLike
                     forecast.uvi = hourly.uvi
                     forecast.temp = hourly.temp
@@ -215,16 +213,6 @@ class DatabaseService {
             print(error)
         }
         return customPublisher
-    }
-    
-    func setCities(){
-        let request = City.fetchRequest()
-        do {
-            let cities = try backgrounContext.fetch(request)
-            print(cities.count)
-        } catch let error {
-            print(error.localizedDescription)
-        }
     }
 }
 

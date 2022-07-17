@@ -11,7 +11,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     }()
     
     let descriptionImageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "sun"))
+        let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()

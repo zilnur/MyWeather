@@ -1,11 +1,5 @@
-//
-//  HourForecastViewController.swift
-//  MyWeather
-//
-//  Created by Ильнур Закиров on 02.04.2022.
-//
-
 import UIKit
+import Charts
 
 class HourForecastViewController: UIViewController {
     
@@ -21,9 +15,24 @@ class HourForecastViewController: UIViewController {
         return view
     }()
     
+    lazy var backButton: UIButton = {
+        let view = UIButton()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.setTitle(" ⃪  Прогноз на 24 часа", for: .normal)
+        view.setTitleColor(.black, for: .normal)
+        view.addTarget(self, action: #selector(tapLeftBtn), for: .touchUpInside)
+        return view
+    }()
+    
+    lazy var leftButton: UIBarButtonItem = {
+       let view = UIBarButtonItem(customView: backButton)
+        return view
+    }()
+    
     init(presenter: HourlyPresenterOutput) {
         self.presenter = presenter
         super.init(nibName: nil, bundle: nil)
+        self.navigationItem.leftBarButtonItem = leftButton
     }
     
     required init?(coder: NSCoder) {
@@ -34,7 +43,10 @@ class HourForecastViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         tableView.reloadData()
-        presenter.qwe()
+    }
+    
+    @objc func tapLeftBtn() {
+        presenter.goBack()
     }
 }
 
@@ -70,30 +82,11 @@ extension HourForecastViewController: UITableViewDataSource, UITableViewDelegate
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = HourTableHeaderView()
-        view.collectionView.dataSource = self
-        view.collectionView.delegate = self
-        presenter.setCityNameForHeader(label: view.cityNameLabel)
+        view.dataSets(dateValues: presenter.setChartData().dtArray, tempValues: presenter.setChartData().tempArray, humidituValues: presenter.setChartData().humidityArray)
         return view
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         223
-    }
-}
-
-extension HourForecastViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        presenter.setNumberOfItems()
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! HourCollectionViewCell
-        presenter.buildDataForCollection(cell: cell, indexPath: indexPath)
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 60, height: 112)
     }
 }
