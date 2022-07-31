@@ -3,8 +3,6 @@ import UIKit
 class SettingsViewController: UIViewController {
     
     let coordinator: Coordinator
-    
-    var completion: () -> ()
 
     private let backgroundView: UIView = {
         let view = UIView()
@@ -154,9 +152,8 @@ class SettingsViewController: UIViewController {
         return image
     }()
     
-    init(coordinator: Coordinator, completion: @escaping () -> ()) {
+    init(coordinator: Coordinator) {
         self.coordinator = coordinator
-        self.completion = completion
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -192,7 +189,6 @@ class SettingsViewController: UIViewController {
             UserDefaults.standard.set(false, forKey: "isOn")
         }
         dismiss(animated: true)
-        completion()
     }
 
 }

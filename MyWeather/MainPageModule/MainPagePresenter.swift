@@ -9,7 +9,8 @@ protocol MainPagePresenterOutput {
     func setNumberOfPages() -> Int
     func pageControllerFinishAnimating(pageViewController: UIPageViewController)
     func afterAddNewCity(controller: UIPageViewController)
-    func openSettings(completion: @escaping ()-> ())
+    func openSettings()
+    func qwe()
 }
 
 protocol MainPagePresenterInput {
@@ -34,7 +35,7 @@ class MainPagePresenter: MainPagePresenterOutput {
         if cities.isEmpty {
             coordinator.showAddCityView(controller: controller)
         } else {
-            let presenter = MainModulePresenter(city: cities[0],coordinator: coordinator)
+            let presenter = MainModulePresenter(city: cities.first! ,coordinator: coordinator)
             let svc = MainViewController(presenter: presenter)
             svc.presenter = presenter
             presenter.view = svc
@@ -93,7 +94,11 @@ class MainPagePresenter: MainPagePresenterOutput {
         controller.title = presenter.city.name
     }
     
-    func openSettings(completion: @escaping ()-> ()) {
-        coordinator.showSettingsView(completion: completion)
+    func openSettings() {
+        coordinator.showSettingsView()
+    }
+    
+    func qwe() {
+        print("qqq \(cities.count)")
     }
 }

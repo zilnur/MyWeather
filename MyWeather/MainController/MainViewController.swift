@@ -26,6 +26,10 @@ class MainViewController: UIViewController, MainModulePresenterInput {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()

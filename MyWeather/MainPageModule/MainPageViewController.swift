@@ -56,6 +56,7 @@ class MainPageViewController: UIPageViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+//        presenter.qwe()
         setupViews()
     }
     
@@ -92,9 +93,7 @@ class MainPageViewController: UIPageViewController {
     }
     
     @objc func tapSettingsBtn() {
-        presenter.openSettings() {
-            self.presenter.setMainPageControllers(self)
-        }
+        presenter.openSettings()
     }
 }
 

@@ -32,13 +32,13 @@
 		BCBF869528393522003AE5BE /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBF869428393522003AE5BE /* DayView.swift */; };
 		BCBF869728393620003AE5BE /* NightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBF869628393620003AE5BE /* NightView.swift */; };
 		BCBF869B28393B90003AE5BE /* DailyDatesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCBF869A28393B90003AE5BE /* DailyDatesCollectionViewCell.swift */; };
+		BCC8F843289694E600437FE7 /* HourTableHeaderView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC8F842289694E600437FE7 /* HourTableHeaderView1.swift */; };
+		BCC8F8452896950A00437FE7 /* HourHeaderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC8F8442896950A00437FE7 /* HourHeaderCollectionViewCell.swift */; };
 		BCC948C927F07385001E3575 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC948C827F07385001E3575 /* AppDelegate.swift */; };
 		BCC948CB27F07385001E3575 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC948CA27F07385001E3575 /* SceneDelegate.swift */; };
 		BCC948CD27F07385001E3575 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCC948CC27F07385001E3575 /* StartViewController.swift */; };
 		BCC948D227F0738B001E3575 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BCC948D127F0738B001E3575 /* Assets.xcassets */; };
 		BCC948D527F0738B001E3575 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BCC948D327F0738B001E3575 /* LaunchScreen.storyboard */; };
-		BCD81A7E287F32BF00DC371A /* HourTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD81A7D287F32BF00DC371A /* HourTableHeaderView.swift */; };
-		BCD81A81287F341600DC371A /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = BCD81A80287F341600DC371A /* Charts */; };
 		BCD81A832882EC8800DC371A /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD81A822882EC8800DC371A /* LocationService.swift */; };
 		BCD81A862883D62500DC371A /* ModulesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD81A852883D62500DC371A /* ModulesFactory.swift */; };
 		BCD81A892883DB8200DC371A /* ModulesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCD81A882883DB8200DC371A /* ModulesCoordinator.swift */; };
@@ -75,6 +75,8 @@
 		BCBF869428393522003AE5BE /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		BCBF869628393620003AE5BE /* NightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightView.swift; sourceTree = "<group>"; };
 		BCBF869A28393B90003AE5BE /* DailyDatesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyDatesCollectionViewCell.swift; sourceTree = "<group>"; };
+		BCC8F842289694E600437FE7 /* HourTableHeaderView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourTableHeaderView1.swift; sourceTree = "<group>"; };
+		BCC8F8442896950A00437FE7 /* HourHeaderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourHeaderCollectionViewCell.swift; sourceTree = "<group>"; };
 		BCC948C527F07385001E3575 /* MyWeather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWeather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BCC948C827F07385001E3575 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BCC948CA27F07385001E3575 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,7 +84,6 @@
 		BCC948D127F0738B001E3575 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BCC948D427F0738B001E3575 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BCC948D627F0738B001E3575 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BCD81A7D287F32BF00DC371A /* HourTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourTableHeaderView.swift; sourceTree = "<group>"; };
 		BCD81A822882EC8800DC371A /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
 		BCD81A852883D62500DC371A /* ModulesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulesFactory.swift; sourceTree = "<group>"; };
 		BCD81A882883DB8200DC371A /* ModulesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModulesCoordinator.swift; sourceTree = "<group>"; };
@@ -98,7 +99,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BCD81A81287F341600DC371A /* Charts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,7 +116,8 @@
 		BC1450AC2861DB4900C75FAF /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				BCD81A7D287F32BF00DC371A /* HourTableHeaderView.swift */,
+				BCC8F842289694E600437FE7 /* HourTableHeaderView1.swift */,
+				BCC8F8442896950A00437FE7 /* HourHeaderCollectionViewCell.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -138,6 +139,13 @@
 				BCD81A8C2884205700DC371A /* NetworkModels.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		BC600A5A288D58F600840871 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		BC6800AF27F8844600B91319 /* StartController */ = {
@@ -222,6 +230,7 @@
 				BCC948C727F07385001E3575 /* MyWeather */,
 				BC33343C27FCB6150094510A /* Services */,
 				BCC948C627F07385001E3575 /* Products */,
+				BC600A5A288D58F600840871 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -345,7 +354,6 @@
 			);
 			name = MyWeather;
 			packageProductDependencies = (
-				BCD81A80287F341600DC371A /* Charts */,
 			);
 			productName = MyWeather;
 			productReference = BCC948C527F07385001E3575 /* MyWeather.app */;
@@ -376,7 +384,6 @@
 			);
 			mainGroup = BCC948BC27F07385001E3575;
 			packageReferences = (
-				BCD81A7F287F341600DC371A /* XCRemoteSwiftPackageReference "Charts" */,
 			);
 			productRefGroup = BCC948C627F07385001E3575 /* Products */;
 			projectDirPath = "";
@@ -407,13 +414,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				BC33343E27FCB6400094510A /* NetworkService.swift in Sources */,
-				BCD81A7E287F32BF00DC371A /* HourTableHeaderView.swift in Sources */,
 				BCBF869528393522003AE5BE /* DayView.swift in Sources */,
 				BC1450AE2861DB9100C75FAF /* HourlyForecastModel.swift in Sources */,
+				BCC8F8452896950A00437FE7 /* HourHeaderCollectionViewCell.swift in Sources */,
 				BCC948CD27F07385001E3575 /* StartViewController.swift in Sources */,
 				BCC948C927F07385001E3575 /* AppDelegate.swift in Sources */,
 				BCBF869B28393B90003AE5BE /* DailyDatesCollectionViewCell.swift in Sources */,
 				BC2A251B281EADF40013FE5C /* HourlyTempChangeTableViewCell.swift in Sources */,
+				BCC8F843289694E600437FE7 /* HourTableHeaderView1.swift in Sources */,
 				BCD81A892883DB8200DC371A /* ModulesCoordinator.swift in Sources */,
 				BCF7A877285F0ED400CEF195 /* HourlyForecastPresenter.swift in Sources */,
 				BCD81A8D2884205700DC371A /* NetworkModels.swift in Sources */,
@@ -648,25 +656,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		BCD81A7F287F341600DC371A /* XCRemoteSwiftPackageReference "Charts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/danielgindi/Charts?ysclid=l4k571ko1n619816945";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		BCD81A80287F341600DC371A /* Charts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = BCD81A7F287F341600DC371A /* XCRemoteSwiftPackageReference "Charts" */;
-			productName = Charts;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		BC33343F27FDDBB90094510A /* Model.xcdatamodeld */ = {

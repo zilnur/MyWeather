@@ -25,7 +25,7 @@ class HourForecastViewController: UIViewController {
     }()
     
     lazy var leftButton: UIBarButtonItem = {
-       let view = UIBarButtonItem(customView: backButton)
+        let view = UIBarButtonItem(customView: backButton)
         return view
     }()
     
@@ -81,12 +81,22 @@ extension HourForecastViewController: UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = HourTableHeaderView()
-        view.dataSets(dateValues: presenter.setChartData().dtArray, tempValues: presenter.setChartData().tempArray, humidituValues: presenter.setChartData().humidityArray)
+        let view = HourTableHeaderView1()
+        view.graphCollectionView.dataSource = self
+        view.graphCollectionView.delegate = self
         return view
     }
+}
+
+extension HourForecastViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        presenter.setNumberOfItems()
+    }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        223
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! HourHeaderCollectionViewCell
+        presenter.buildDataForCollection(cell: cell, indexPath: indexPath)
+        return cell
     }
 }
+

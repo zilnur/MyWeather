@@ -173,7 +173,7 @@ extension Double {
         case true:
             return "\(Int(self))"
         case false:
-            let farenheit = (self * 5/9) + 32
+            let farenheit = (self * 9/5) + 32
             return "\(Int(farenheit))"
         }
     }

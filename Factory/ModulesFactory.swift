@@ -30,8 +30,8 @@ class ModulesFactory {
         return view
     }
     
-    func makeSettingsView(coordinator: Coordinator, completion: @escaping () -> ()) -> UIViewController {
-        let view = SettingsViewController(coordinator: coordinator, completion: completion)
+    func makeSettingsView(coordinator: Coordinator) -> UIViewController {
+        let view = SettingsViewController(coordinator: coordinator)
         view.modalPresentationStyle = .fullScreen
         view.modalTransitionStyle = .coverVertical
         return view

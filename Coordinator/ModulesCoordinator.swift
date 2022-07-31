@@ -9,7 +9,6 @@ class Coordinator {
     init(navi: UINavigationController, factory: ModulesFactory) {
         self.navigationController = navi
         self.factory = factory
-//        self.navigationController.setNavigationBarHidden(true, animated: true)
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .white
@@ -48,8 +47,8 @@ class Coordinator {
         navigationController.pushViewController(factory.makeStartView(coordinator: self), animated: true)
     }
     
-    func showSettingsView(completion: @escaping () -> ()) {
-        navigationController.present(factory.makeSettingsView(coordinator: self, completion: completion), animated: true)
+    func showSettingsView() {
+        navigationController.present(factory.makeSettingsView(coordinator: self), animated: true)
     }
     
     func back() {

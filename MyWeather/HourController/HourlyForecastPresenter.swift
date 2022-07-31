@@ -9,8 +9,8 @@ protocol HourlyPresenterOutput {
     func buildDataForTable(cell: HourlyTempChangeTableViewCell, indexPath: IndexPath)
     func setCityNameForHeader(label: UILabel)
     func setNumberOfItems() -> Int
-    func setChartData() -> (dtArray: [Double], tempArray: [Double], humidityArray: [Double])
     func goBack()
+    func buildDataForCollection(cell: HourHeaderCollectionViewCell, indexPath: IndexPath)
 }
 
 class HourlyForecastPresenter: HourlyPresenterOutput {
@@ -35,25 +35,22 @@ class HourlyForecastPresenter: HourlyPresenterOutput {
         cell.humidityValueLabel.text = "\(model.forecasts[indexPath.item].humidity)"
     }
     
+    func buildDataForCollection(cell: HourHeaderCollectionViewCell, indexPath: IndexPath) {
+        cell.temperatureLabel.text = "\(model.forecasts[indexPath.item].temp.toString())°"
+        cell.humidityLabel.text = "\(model.forecasts[indexPath.item].humidity)%"
+        cell.timeLabel.text = model.forecasts[indexPath.item].dt.toTime()
+        
+        let minTemp = model.forecasts.min(by: {$0.temp < $1.temp})!.temp
+        let maxTemp = model.forecasts.max(by: {$0.temp < $1.temp})!.temp
+        cell.putDotOfTemperature(minTemperature: minTemp, maxTemperature: maxTemp, temp: model.forecasts[indexPath.item].temp)
+    }
+    
     func setCityNameForHeader(label: UILabel) {
         label.text = model.name
     }
     
     func setNumberOfItems() -> Int {
         return model.forecasts.count
-    }
-    
-    func setChartData() -> (dtArray: [Double], tempArray: [Double], humidityArray: [Double]) {
-        var dtArray = [Double]()
-        var tempArray = [Double]()
-        var qArray = [Double]()
-        for i in model.forecasts {
-            dtArray.append(Double(i.dt))
-            tempArray.append(i.temp)
-            qArray.append(Double(i.humidity))
-        }
-        
-        return (dtArray, tempArray, qArray)
     }
     
     func goBack() {
