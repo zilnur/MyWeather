@@ -9,11 +9,13 @@ import UIKit
 
 class HourHeaderCollectionViewCell: UICollectionViewCell {
     
+    var nextTimeTemp: Int?
+    
     var isFirstCell: Bool = false
+    var isLastCell: Bool = false
     
     let temperatureLabel: UILabel = {
         let view = UILabel()
-//        label.textColor = UIColor(named: "MyBlack")
         view.font = UIFont(name: "Rubik-Regular", size: 12)
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -72,16 +74,19 @@ class HourHeaderCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = UIColor(red: 0.914, green: 0.933, blue: 0.98, alpha: 1)
+        self.backgroundColor = .clear
         setupViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
+
+    override func draw(_ rect: CGRect) {
+        if !isLastCell {
+            drawGradient()
+            drawLine()
+        }
         drawDashedLines()
     }
     
@@ -90,19 +95,8 @@ class HourHeaderCollectionViewCell: UICollectionViewCell {
         temperatureContentView.addSubview(temperatureLabel)
         
         let differenceBitweenMaxAndMinTemp = maxTemperature - minTemperature
-        let pointsPerDegree = 25 / differenceBitweenMaxAndMinTemp
+        let pointsPerDegree = 20 / differenceBitweenMaxAndMinTemp
         let currentTemperatureOffset = Int((maxTemperature - temp) * pointsPerDegree)
-        
-//        temperatureDot.snp.remakeConstraints { make in
-//            make.top.equalTo(temperatureContentView.snp.top).offset(currentTemperatureOffset)
-//            make.left.equalToSuperview()
-//            make.height.width.equalTo(4)
-//        }
-//
-//        temperatureLabel.snp.remakeConstraints { make in
-//            make.bottom.equalTo(temperatureDot.snp.top).offset(-2)
-//            make.left.equalToSuperview()
-//        }
         
         [temperatureDot.leadingAnchor.constraint(equalTo: temperatureContentView.leadingAnchor),
          temperatureDot.topAnchor.constraint(equalTo: temperatureContentView.topAnchor, constant: CGFloat(currentTemperatureOffset)),
@@ -121,7 +115,6 @@ class HourHeaderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(timeDot)
         contentView.addSubview(timeLine)
         contentView.addSubview(timeLabel)
-        
         [
             temperatureContentView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 31),
             temperatureContentView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -153,26 +146,6 @@ class HourHeaderCollectionViewCell: UICollectionViewCell {
         .forEach {$0.isActive = true}
     }
     
-//    private func fillLabels() {
-//        guard let hourForecast = forecastForOneHour else {
-//            return
-//        }
-//        if UserDefaults.standard.string(forKey: "temperature") == "C" {
-//            temperatureLabel.text = "\(Int(hourForecast.temp))\u{00B0}"
-//        } else {
-//            temperatureLabel.text = "\(Int((hourForecast.temp * 9/5) + 32))\u{00B0}"
-//        }
-//        weatherIcon.image = UIImage(named: hourForecast.weather.icon)
-//        probabilityOfPrecipitation.text = "\(Int(hourForecast.pop))%"
-//        let timeFormatter = DateFormatter()
-//        if UserDefaults.standard.string(forKey: "dateFormat") == "24" {
-//            timeFormatter.dateFormat = "HH:mm"
-//        } else {
-//            timeFormatter.dateFormat = "hh:mm"
-//        }
-//        timeLabel.text = timeFormatter.string(from: Date(timeIntervalSince1970: hourForecast.dt))
-//    }
-    
     public func drawDashedLines() {
         if isFirstCell {
             addDashedLine(begin: CGPoint(x: temperatureContentView.frame.minX,
@@ -199,6 +172,41 @@ class HourHeaderCollectionViewCell: UICollectionViewCell {
         
         shapeLayer.path = path
         self.layer.addSublayer(shapeLayer)
+    }
+    
+    func drawLine() {
+        let path = UIBezierPath()
+        let start = CGPoint(x: temperatureDot.frame.maxX, y: 31 + temperatureDot.frame.midY)
+        let end = CGPoint(x: 51, y: 33 + CGFloat(nextTimeTemp!))
+        print(end)
+        path.move(to: start)
+        path.addLine(to: end)
+        let color = UIColor.blue
+        color.setStroke()
+        path.lineWidth = 0.3
+        path.stroke()
+    }
+    
+    func drawGradient() {
+        let path = UIBezierPath()
+        let end = CGPoint(x: 51, y: 33 + CGFloat(nextTimeTemp!))
+        path.move(to: CGPoint(x: temperatureContentView.frame.minX,
+                              y: temperatureContentView.frame.maxY))
+        path.addLine(to: CGPoint(x: temperatureDot.frame.minX,
+                                 y: temperatureDot.frame.midY + 31))
+        path.addLine(to: end)
+        path.addLine(to: CGPoint(x: temperatureContentView.frame.maxX,
+                                 y: temperatureContentView.frame.maxY))
+        
+        let gradient = CGGradient(colorsSpace: nil, colors: [UIColor(named: "gradient")!.cgColor, UIColor.white.cgColor] as CFArray, locations: nil)!
+
+        let ctx = UIGraphicsGetCurrentContext()!
+        ctx.saveGState()
+
+        path.addClip()
+        ctx.drawLinearGradient(gradient, start: CGPoint(x: 0, y: 0), end: CGPoint(x: 0, y: frame.height / 2), options: [])
+
+        ctx.restoreGState()
     }
     
 }

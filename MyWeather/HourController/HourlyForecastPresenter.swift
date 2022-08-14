@@ -42,7 +42,20 @@ class HourlyForecastPresenter: HourlyPresenterOutput {
         
         let minTemp = model.forecasts.min(by: {$0.temp < $1.temp})!.temp
         let maxTemp = model.forecasts.max(by: {$0.temp < $1.temp})!.temp
+        if indexPath.item < setNumberOfItems() - 1 {
+            let differenceBitweenMaxAndMinTemp = maxTemp - minTemp
+            let pointsPerDegree = 20 / differenceBitweenMaxAndMinTemp
+            let currentTemperatureOffset = Int((maxTemp - model.forecasts[indexPath.item + 1].temp) * pointsPerDegree)
+            cell.nextTimeTemp = currentTemperatureOffset
+            print(cell.nextTimeTemp)
+        }
         cell.putDotOfTemperature(minTemperature: minTemp, maxTemperature: maxTemp, temp: model.forecasts[indexPath.item].temp)
+        if indexPath.item == 0 {
+            cell.isFirstCell = true
+        }
+        if indexPath.item == model.forecasts.count - 1 {
+            cell.isLastCell = true
+        }
     }
     
     func setCityNameForHeader(label: UILabel) {
